@@ -1,10 +1,9 @@
 <?php
-
 /**
- * Created by PhpStorm.
  * User: techbeast
  * Date: 24/12/15
  * Time: 10:39 PM
+ * Description: Oriented class for DB operations
  */
 
 /*-- defining static objects to be used --*/
@@ -30,7 +29,7 @@ class DB {
         //create connection
         $this->dbh = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
         if(!$this->dbh){
-            $this->printError("<strong>Error establishing a database connection!</strong>
+            $this->print_error("<strong>Error establishing a database connection!</strong>
                                 <ol>
                                     <li>Are you sure that the database server is running?</li>
                                     <li>Are you sure that you have typed the correct hostname?</li>
@@ -39,11 +38,16 @@ class DB {
         }
     }
 
+    /*function __destruct() {
+        //close connection
+        mysqli_close($this->dbh);
+    }*/
+
 
     /*-- to select / switch database --*/
-    function selectDB($databaseName) {
+    function select_db($databaseName) {
         if (!@mysqli_select_db($databaseName,$this->dbh)) {
-            $this->printError("<strong>Error selecting database <span style='text-decoration: underline'>$databaseName</span> ..!</strong>
+            $this->print_error("<strong>Error selecting database <span style='text-decoration: underline'>$databaseName</span> ..!</strong>
                                 <ol>
                                     <li>Are you sure it exists?</li>
                                     <li>Are you sure there is a valid database connection?</li>
@@ -59,7 +63,7 @@ class DB {
 
 
     /*-- function to toggle error display modes i.e. error reporting --*/
-    function errorReporting($mode = 1){
+    function error_reporting($mode = 1){
         $this->showErrors = ($mode) ? true : false;
     }
 
@@ -96,7 +100,7 @@ class DB {
 
         //print if any error
         if (mysqli_error($this->dbh)) {
-            $this->printError();
+            $this->print_error();
             return false;
         }
 
@@ -147,7 +151,7 @@ class DB {
 
 
     /*-- function to get single value returned from the result --*/
-    function getVar($query = null, $x=0, $y=0) {
+    function get_var($query = null, $x=0, $y=0) {
 
         //log the function called
         $this->functionCalled = "\$db->getVar(\"$query\",$x,$y)";
@@ -170,7 +174,7 @@ class DB {
 
 
     /*-- function to get first row of result set --*/
-    function getRow($query = null, $output = OBJECT, $y=0) {
+    function get_row($query = null, $output = OBJECT, $y=0) {
 
         //log the function called
         $this->functionCalled = "\$db->getRow(\"$query\",$output,$y)";
@@ -194,14 +198,14 @@ class DB {
         }
         //if invalid output type was specified..
         else {
-            $this->printError(" \$db->getRow(string query, output type, int offset) -- Output type must be one of: OBJECT, ARRAY_A, ARRAY_N");
+            $this->print_error(" \$db->getRow(string query, output type, int offset) -- Output type must be one of: OBJECT, ARRAY_A, ARRAY_N");
         }
 
     }
 
 
     /*-- function to get 1 column from the cached result set based in X index --*/
-    function getCol($query=null,$x=0) {
+    function get_col($query=null, $x=0) {
         if ($query) {
             $this->query($query);
         }
@@ -210,7 +214,7 @@ class DB {
 
         //extract the column values
         for ($i=0; $i < count($this->lastResult); $i++) {
-            $newArray[$i] = $this->getVar(null, $x, $i);
+            $newArray[$i] = $this->get_var(null, $x, $i);
         }
 
         return $newArray;
@@ -218,7 +222,7 @@ class DB {
 
 
     /*-- return the result from the query passed --*/
-    function getResults($query=null, $output = OBJECT) {
+    function get_results($query=null, $output = OBJECT) {
 
         //log the function called
         $this->functionCalled = "\$db->get_results(\"$query\", $output)";
@@ -259,7 +263,7 @@ class DB {
 
 
     /*-- function to get column meta data info pertaining to the last query --*/
-    function getColInfo($infoType = "name", $colOffset = -1) {
+    function get_col_info($infoType = "name", $colOffset = -1) {
         $newArray= array();
 
         if($this->colInfo) {
@@ -280,7 +284,7 @@ class DB {
 
 
     /*-- dumps the contents of any input variable to screen in formatted --*/
-    function varDump($mixed = '') {
+    function var_dump($mixed = '') {
         echo "<p>
                 <table>
                     <tr>
@@ -345,7 +349,7 @@ class DB {
             if ($this->lastResult) {
 
                 $i=0;
-                foreach ($this->getResults(null, ARRAY_N) as $row) {
+                foreach ($this->get_results(null, ARRAY_N) as $row) {
                     $i++;
                     echo "<tr style='background: #ffffff'>
                             <td style='background: #eeeeee; color: #555599'>$i</td>";
@@ -377,7 +381,7 @@ class DB {
 
 
     /*-- print sql errors --*/
-    function printError($errorString = "") {
+    function print_error($errorString = "") {
 
         //create global error variable where all errors are dumped
         global $SQL_ERROR;
@@ -390,8 +394,8 @@ class DB {
 
         //log this error to the global array..
         $SQL_ERROR[] = array("query" => $this->lastQuery,
-                                "error_str"  => $errorString,
-                                "error_no"   => $errorNo);
+            "error_str"  => $errorString,
+            "error_no"   => $errorNo);
 
         //check if error output turned on
         if ($this->showErrors){
