@@ -1,5 +1,5 @@
 ## class.db
-Easy way to perform database query operations.
+Class.db is a micro-framework to easily perform database query operations in PHP.
 
 
 ## Installation
