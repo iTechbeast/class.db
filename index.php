@@ -3,13 +3,12 @@
  * Created by PhpStorm.
  * User: techbeast
  * Date: 27/12/15
- * Time: 4:46 PM
  * Description: Examples of how this micro-framework can be used.
  */
 
 /*-- this is a database test file --*/
 
-//include your db config file, and initialize the DB connection
+//include your db-config.php file, and initialize the DB connection
 require_once("db-config.php");
 
 /*-- insert --*/
