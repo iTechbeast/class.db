@@ -13,4 +13,4 @@ Class.db is a micro-framework to easily perform database query operations in PHP
 You can check index.php for working examples.
 
 ## Improvements
-Send me your pull requests with improvements and I'll merge it to the repo.
+Send me your pull requests with improvements and I'll merge it to the repo. Also please read the CONTRIBUTING.md file on how to submit updates to this repo.
